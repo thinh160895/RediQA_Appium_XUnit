@@ -3,6 +3,7 @@ using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.Enums;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Redi_Appium
 {
@@ -10,8 +11,9 @@ namespace Redi_Appium
     {
         private readonly AndroidDriver _driver;
         private readonly SwipeHandler _swipeHandler;
+        private readonly ITestOutputHelper _output;
 
-        public LoginPage()
+        public LoginPage(ITestOutputHelper output)
         {
             var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:4723/");
             var driverOptions = new AppiumOptions()
@@ -44,7 +46,8 @@ namespace Redi_Appium
                 throw new Exception("Element not found", ex);
             }
 
-            _swipeHandler = new SwipeHandler(_driver);
+            _swipeHandler = new SwipeHandler(_driver, output);
+            _output = output;
         }
 
         [Fact]
@@ -52,6 +55,7 @@ namespace Redi_Appium
         {
             _driver.StartActivity("com.dichoisolution.redi.qa", "com.dichoisolution.redi.MainActivity");
             _swipeHandler.Swipe("LEFT", 3);
+            Thread.Sleep(2000);
             _driver.FindElement(MobileBy.AccessibilityId("Next")).Click();
         }
         public void Dispose()

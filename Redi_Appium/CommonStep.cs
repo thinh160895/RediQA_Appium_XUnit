@@ -1,5 +1,10 @@
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 using OpenQA.Selenium.Appium.Android;
+using OpenQA.Selenium.Appium.Interfaces;
+using OpenQA.Selenium.Appium.MultiTouch;
 using OpenQA.Selenium.Interactions;
+using Xunit.Abstractions;
+using static OpenQA.Selenium.Interactions.PointerInputDevice;
 
 
 namespace Redi_Appium
@@ -7,10 +12,12 @@ namespace Redi_Appium
     public class SwipeHandler
     {
         private AndroidDriver _driver;
+        private readonly ITestOutputHelper _output;
 
-        public SwipeHandler(AndroidDriver driver)
+        public SwipeHandler(AndroidDriver driver, ITestOutputHelper output)
         {
             _driver = driver ?? throw new ArgumentNullException(nameof(driver), "AndroidDriver cannot be null.");
+            _output = output;
         }
         public void Swipe(string direction, int times)
         {
@@ -36,18 +43,18 @@ namespace Redi_Appium
                     {
                         case "DOWN":
                             endX = startX;
-                            endY = startY + 200;
+                            endY = startY + startY;
                             break;
                         case "UP":
                             endX = startX;
-                            endY = 200;
+                            endY = startY - startY;
                             break;
                         case "LEFT":
-                            endX = 200;
+                            endX = startX - startX;
                             endY = startY;
                             break;
                         case "RIGHT":
-                            endX = startX + 200;
+                            endX = startX + startX;
                             endY = startY;
                             break;
                         default:
@@ -56,14 +63,19 @@ namespace Redi_Appium
 
                     // Tạo action để swipe
                     var move = touch.CreatePointerMove(CoordinateOrigin.Viewport, endX, endY, TimeSpan.FromSeconds(1));
-                    sequence.AddAction(move);
+                    sequence
+                        .AddAction(touch.CreatePointerMove(CoordinateOrigin.Viewport, startX, startY, TimeSpan.FromSeconds(1)))
+                        .AddAction(touch.CreatePointerDown(MouseButton.Touch))
+                        .AddAction(touch.CreatePointerMove(CoordinateOrigin.Viewport, endX, endY, TimeSpan.FromSeconds(1)))
+                        .AddAction(touch.CreatePointerUp(MouseButton.Touch))
+                        ;
 
                     var actionsSeq = new List<ActionSequence> { sequence };
                     _driver.PerformActions(actionsSeq);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    _output.WriteLine(ex.ToString());
                 }
             }
         }
