@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Redi_Appium")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c3cb5057f6ea14cfba74ce48641202eda5da4a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Redi_Appium")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Redi_Appium")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

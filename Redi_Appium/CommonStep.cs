@@ -29,25 +29,27 @@ namespace Redi_Appium
                     var startY = _driver.Manage().Window.Size.Height / 2;
 
                     // Số lượng pixel để swipe theo hướng tương ứng
-                    var endX = 200;
-                    var endY = 200;
+                    var endX = 10;
+                    var endY = 10;
 
                     switch (direction.ToUpper())
                     {
                         case "DOWN":
                             endX = startX;
-                            endY = startY + 200;
+                            endY = startY + 400;
                             break;
                         case "UP":
                             endX = startX;
-                            endY = 200;
+                            endY = 10;
                             break;
                         case "LEFT":
-                            endX = 200;
+                            startX = startX + 400;
+                            endX = 10;
                             endY = startY;
                             break;
                         case "RIGHT":
-                            endX = startX + 200;
+                            startX = startX - 400;
+                            endX = startX + 400;
                             endY = startY;
                             break;
                         default:
@@ -55,8 +57,15 @@ namespace Redi_Appium
                     }
 
                     // Tạo action để swipe
-                    var move = touch.CreatePointerMove(CoordinateOrigin.Viewport, endX, endY, TimeSpan.FromSeconds(1));
-                    sequence.AddAction(move);
+                    // var move = touch.CreatePointerMove(CoordinateOrigin.Viewport, endX, endY, TimeSpan.FromSeconds(1));
+                    // sequence.AddAction(move);
+
+                    // var move = touch.CreatePointerMove(CoordinateOrigin.Viewport, endX, endY, TimeSpan.FromSeconds(1));
+                    sequence
+                        .AddAction(touch.CreatePointerMove(CoordinateOrigin.Viewport, startX, startY, TimeSpan.FromSeconds(1)))
+                        .AddAction(touch.CreatePointerDown(MouseButton.Touch))
+                        .AddAction(touch.CreatePointerMove(CoordinateOrigin.Viewport, endX, endY, TimeSpan.FromSeconds(1)))
+                        .AddAction(touch.CreatePointerUp(MouseButton.Touch));
 
                     var actionsSeq = new List<ActionSequence> { sequence };
                     _driver.PerformActions(actionsSeq);

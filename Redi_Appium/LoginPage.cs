@@ -19,11 +19,13 @@ namespace Redi_Appium
                 AutomationName = AutomationName.AndroidUIAutomator2,
                 PlatformName = "Android",
                 DeviceName = "Samsung Galaxy S10",
+                
             };
 
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.dichoisolution.redi.qa");
             driverOptions.AddAdditionalAppiumOption("appActivity", "com.dichoisolution.redi.MainActivity");
             // NoReset assumes the app com.google.android is preinstalled on the emulator
+            // Set Capability.SetCapability("autoGrantPermissions", "true");
             driverOptions.AddAdditionalAppiumOption("noReset", true);
 
             try
@@ -52,6 +54,10 @@ namespace Redi_Appium
         {
             _driver.StartActivity("com.dichoisolution.redi.qa", "com.dichoisolution.redi.MainActivity");
             _swipeHandler.Swipe("LEFT", 3);
+            _driver.FindElement(MobileBy.AccessibilityId("Next")).Click();
+            TimeSpan.FromSeconds(1);
+            _driver.FindElement(MobileBy.AccessibilityId("Next")).Click();
+            TimeSpan.FromSeconds(3);
             _driver.FindElement(MobileBy.AccessibilityId("Next")).Click();
         }
         public void Dispose()
